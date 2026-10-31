@@ -3,14 +3,20 @@
 
 _pkg="archiso"
 _pkgbase="${_pkg}-profiles"
-_profile=life
-pkgname="${_profile}"
+_pkg=dogeos
+_profile="${_pkg}"
+pkgname=(
+  "${_profile}"
+)
 # _pkgver=$(date %s)
 pkgver=v0.1+7+g3359a3e
 pkgrel=2
-pkgdesc='Archiso experimental desktop profile'
+pkgdesc='The DogeOS GNU/Linux base.'
 url="https://www.humaninstrumentalityproject.org"
-_url="https://gitlab.archlinux.org/tallero/${_pkgbase}#"
+if [[ ! -v "_ns" ]]; then
+  _ns="themartiancompany"
+fi
+_url="https://github/themartiancompany/${_pkg}"
 arch=(
   any
 )
@@ -20,30 +26,42 @@ depends=(
   'fakepkg'
   'mkinitcpio-archiso-encryption-git'
   'plymouth-nested-cryptkey'
-  'polkit')
+  'polkit'
+)
 makedepends=(
   'devtools'
-  'git')
+  'git'
+)
 checkdepends=(
-  'shellcheck')
+  'shellcheck'
+)
 _commit="143be1cc01d0349782c8edbb9c0b2ff2bb1dcdcd" # 0.1
 source=(
-  "git+${_url}#commit=${_commit}")
+  "git+${_url}#commit=${_commit}"
+)
 sha256sums=(
-  'SKIP')
+  'SKIP'
+)
 
 pkgver() {
-  cd "${_pkgbase}" || \
+  cd \
+    "${_pkg}" || \
     exit
-  git describe --tags | \
-    sed 's/-/+/g'
+  git \
+    describe \
+    --tags |
+    sed \
+      's/-/+/g'
 }
 
 package() {
   # shellcheck disable=SC2154
-  local _profile="${_pkgbase}/${_profile}"
-  cd "${_profile}" || \
+  local \
+    _profile="${_pkgbase}/${_profile}"
+  cd \
+    "${_profile}" || \
     exit
-  ./build_repo.sh fakepkg
+  "./build_repo.sh" \
+    fakepkg
   # pkexec mkarchiso -v "./" # ${_profile}"
 }
