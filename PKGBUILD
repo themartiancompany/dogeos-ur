@@ -63,5 +63,8 @@ package() {
     exit
   "./build_repo.sh" \
     fakepkg
-  # pkexec mkarchiso -v "./" # ${_profile}"
+  # pkexec \
+  #   mkarchiso \
+  #     -v \
+  #   "${PWD}" # ${_profile}"
 }
